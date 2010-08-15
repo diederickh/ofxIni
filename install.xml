@@ -1,0 +1,7 @@
+<install>
+	<name>ofxIni</name>
+	<version>0.01</version>
+	<author>Diederick Huijbers</author>
+	<url>www.roxlu.com</url>
+	<description>Minimal C-style ini file parser</description>
+</install>
