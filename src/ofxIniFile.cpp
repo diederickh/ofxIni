@@ -14,20 +14,19 @@ int	ofxIniFile::get(const char* sKey,int defaultValue) {
 double ofxIniFile::get(const char* sKey, double defaultValue) {
 	return iniparser_getdouble(ini,(char*)sKey, defaultValue);
 }
-	
+
 // Get std::string
 char* ofxIniFile::get(const char* sKey, char* sDefaultValue) {
 	return iniparser_getstring(ini, sKey, sDefaultValue);
 }
-	
-// Get boolean	
+
+// Get boolean
 bool	ofxIniFile::get(const char* sKey, bool defaultValue) {
 	return iniparser_getboolean(ini,sKey, (defaultValue) ? 1 : 0);
 }
 
 // Get a list with values.
 std::vector<std::string> ofxIniFile::getStringVector(const char* sKey, char* sDefaultValue, char sSeparator) {
-	std::cout << "Get a vector string!" << std::endl;
 	std::string value = get(sKey, sDefaultValue);
 	std::vector<std::string> result;
 	std::stringstream ss(value);
