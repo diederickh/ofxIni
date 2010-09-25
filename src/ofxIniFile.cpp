@@ -1,33 +1,41 @@
 #include "ofxIniFile.h"
 #include "ofMain.h"
 
-ofxIniFile::ofxIniFile(char* sFile) {
-	ini = iniparser_load(ofToDataPath(sFile).c_str());
+ofxIniFile::ofxIniFile(std::string sFile) {
+	//ini = iniparser_load(ofToDataPath(sFile).c_str());
+	SI_Error err = ini.LoadFile(sFile.c_str());
+	if (err != SI_OK)
+        std::cout << "ofxIniFile: error loading file" << std::endl;
 }
 
-// Get int
-int	ofxIniFile::get(const char* sKey,int defaultValue) {
-	return iniparser_getint(ini, sKey, defaultValue);
-}
-
-// Get float/double
-double ofxIniFile::get(const char* sKey, double defaultValue) {
-	return iniparser_getdouble(ini,(char*)sKey, defaultValue);
+// Get long
+long ofxIniFile::getLong(std::string sSection, std::string sKey, long nDefaultValue) {
+    return ini.GetLongValue(sSection.c_str(), sKey.c_str(), nDefaultValue);
 }
 
 // Get std::string
-char* ofxIniFile::get(const char* sKey, char* sDefaultValue) {
-	return iniparser_getstring(ini, sKey, sDefaultValue);
+std::string ofxIniFile::getString(std::string sSection, std::string sKey, std::string sDefaultValue) {
+    std::cout << "Get string" << std::endl;
+	return ini.GetValue(sSection.c_str(), sKey.c_str(), sDefaultValue.c_str());
+}
+/*
+D:\programming\c++\openframeworks_vs-0.061\addons\
+C:\Documents and Settings\multimedia\Mijn documenten\ahm_man_mode\openframeworks_vs\addons\
+*/
+// Get int.
+int ofxIniFile::getInt(std::string sSection, std::string  sKey, int nDefaultValue) {
+    long lvalue = static_cast<long>(nDefaultValue);
+    return getLong(sSection, sKey, lvalue);
 }
 
 // Get boolean
-bool	ofxIniFile::get(const char* sKey, bool defaultValue) {
-	return iniparser_getboolean(ini,sKey, (defaultValue) ? 1 : 0);
+bool ofxIniFile::getBool(std::string sSection, std::string sKey, bool bDefaultValue) {
+    return ini.GetBoolValue(sSection.c_str(), sKey.c_str(), bDefaultValue);
 }
 
 // Get a list with values.
-std::vector<std::string> ofxIniFile::getStringVector(const char* sKey, char* sDefaultValue, char sSeparator) {
-	std::string value = get(sKey, sDefaultValue);
+std::vector<std::string> ofxIniFile::getStringVector(std::string sSection, std::string sKey, std::string sDefaultValue, char sSeparator) {
+    std::string value = getString(sSection, sKey, sDefaultValue);
 	std::vector<std::string> result;
 	std::stringstream ss(value);
     std::string item;
@@ -46,8 +54,12 @@ std::vector<std::string> ofxIniFile::getStringVector(const char* sKey, char* sDe
 		result.push_back(item);
     }
 	return result;
+
+
 }
 
+
+
 ofxIniFile::~ofxIniFile() {
-	iniparser_freedict(ini);
+	//iniparser_freedict(ini);
 }
