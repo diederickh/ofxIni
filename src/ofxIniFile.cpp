@@ -15,7 +15,6 @@ long ofxIniFile::getLong(std::string sSection, std::string sKey, long nDefaultVa
 
 // Get std::string
 std::string ofxIniFile::getString(std::string sSection, std::string sKey, std::string sDefaultValue) {
-    std::cout << "Get string" << std::endl;
 	return ini.GetValue(sSection.c_str(), sKey.c_str(), sDefaultValue.c_str());
 }
 /*
@@ -54,12 +53,9 @@ std::vector<std::string> ofxIniFile::getStringVector(std::string sSection, std::
 		result.push_back(item);
     }
 	return result;
-
-
 }
 
 
 
 ofxIniFile::~ofxIniFile() {
-	//iniparser_freedict(ini);
 }
