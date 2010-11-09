@@ -8,7 +8,8 @@ ofxIniFile::ofxIniFile(std::string sFile)
 	SI_Error err = ini.LoadFile(sFile.c_str());
 	if (err != SI_OK) {
 		// try from data path
-		sFile = ofToDataPath(sFile,true);
+		sFile = ofToDataPath(sFile,false);
+		std::cout << sFile << std::endl;
 		err = ini.LoadFile(sFile.c_str());
 		if(err != SI_OK)
 			std::cout << "ofxIniFile: error loading file" << std::endl;

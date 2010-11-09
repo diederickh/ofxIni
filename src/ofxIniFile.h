@@ -30,7 +30,7 @@ public:
     std::string getString(
 		 std::string sSection
 		,std::string sKey
-		,std::string sDefaultValue
+		,std::string sDefaultValue = ""
 	);
 	
     bool getBool(
