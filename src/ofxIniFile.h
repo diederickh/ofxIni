@@ -52,6 +52,25 @@ public:
 			,std::string sKey
 	);
 	
+	void setInt(
+		std::string sSection
+		,std::string sKey
+		,int nIntValue
+	);
+	
+	void setLong(
+		std::string sSection
+		,std::string sKey
+		,long nLongValue
+	);
+	
+	void setBool(
+		std::string sSection
+		,std::string sKey
+		,bool bBoolValue
+	);
+	
+	void save();
 
 /*
     bool GetAllValues(

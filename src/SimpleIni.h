@@ -262,7 +262,6 @@ enum SI_Error {
 # define SI_WCHAR_T     UChar
 #endif
 
-
 // ---------------------------------------------------------------------------
 //                              MAIN TEMPLATE CLASS
 // ---------------------------------------------------------------------------
@@ -1796,7 +1795,6 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::AddEntry(
     bool bInserted = false;
 
     SI_ASSERT(!a_pComment || IsComment(*a_pComment));
-
     // if we are copying strings then make a copy of the comment now
     // because we will need it when we add the entry.
     if (a_bCopyStrings && a_pComment) {
@@ -1826,6 +1824,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::AddEntry(
         iSection = i.first;
         bInserted = true;
     }
+	
     if (!a_pKey || !a_pValue) {
         // section only entries are specified with pItem and pVal as NULL
         return bInserted ? SI_INSERTED : SI_UPDATED;
@@ -1989,7 +1988,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SetLongValue(
     SI_CONVERTER c(m_bStoreIsUtf8);
     c.ConvertFromStore(szInput, strlen(szInput) + 1, 
         szOutput, sizeof(szOutput) / sizeof(SI_CHAR));
-
+	
     // actually add it
     return AddEntry(a_pSection, a_pKey, szOutput, a_pComment, a_bForceReplace, true);
 }
@@ -2195,7 +2194,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SaveFile(
 #if __STDC_WANT_SECURE_LIB__ && !_WIN32_WCE
     fopen_s(&fp, a_pszFile, "wb");
 #else // !__STDC_WANT_SECURE_LIB__
-    fp = fopen(a_pszFile, "wb");
+    fp = fopen(a_pszFile,"wb");
 #endif // __STDC_WANT_SECURE_LIB__
     if (!fp) return SI_FILE;
     SI_Error rc = SaveFile(fp, a_bAddSignature);
@@ -2211,6 +2210,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SaveFile(
     bool                a_bAddSignature
     ) const
 {
+
 #ifdef _WIN32
     FILE * fp = NULL;
 #if __STDC_WANT_SECURE_LIB__ && !_WIN32_WCE
@@ -2249,7 +2249,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
     ) const
 {
     Converter convert(m_bStoreIsUtf8);
-
+	
     // add the UTF-8 signature if it is desired
     if (m_bStoreIsUtf8 && a_bAddSignature) {
         a_oOutput.Write(SI_UTF8_SIGNATURE);
@@ -2274,6 +2274,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
         }
         bNeedNewLine = true;
     }
+
 
     // iterate through our sections and output the data
     typename TNamesDepend::const_iterator iSection = oSections.begin();
@@ -2331,13 +2332,13 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
                 if (iValue->pComment) {
                     a_oOutput.Write(SI_NEWLINE_A);
                     if (!OutputMultiLineText(a_oOutput, convert, iValue->pComment)) {
-                        return SI_FAIL;
+						return SI_FAIL;
                     }
                 }
 
                 // write the key
                 if (!convert.ConvertToStore(iKey->pItem)) {
-                    return SI_FAIL;
+					    return SI_FAIL;
                 }
                 a_oOutput.Write(convert.Data());
 
@@ -2351,7 +2352,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
                     // that we use the correct newline format for the current system
                     a_oOutput.Write("<<<SI-END-OF-MULTILINE-TEXT" SI_NEWLINE_A);
                     if (!OutputMultiLineText(a_oOutput, convert, iValue->pItem)) {
-                        return SI_FAIL;
+				          return SI_FAIL;
                     }
                     a_oOutput.Write("SI-END-OF-MULTILINE-TEXT");
                 }

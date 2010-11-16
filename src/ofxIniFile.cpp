@@ -3,18 +3,18 @@
 
 ofxIniFile::ofxIniFile(std::string sFile)
 :ini(false, true, false)
+,ini_file(sFile)
 {
 	//ini = iniparser_load(ofToDataPath(sFile).c_str());
 	SI_Error err = ini.LoadFile(sFile.c_str());
 	if (err != SI_OK) {
 		// try from data path
 		sFile = ofToDataPath(sFile,false);
-		std::cout << sFile << std::endl;
+		ini_file = sFile;
 		err = ini.LoadFile(sFile.c_str());
 		if(err != SI_OK)
 			std::cout << "ofxIniFile: error loading file" << std::endl;
 	}
-	
 	// 2010.11.02, make it possible to use multi keys.
 	ini.SetMultiKey(true);
 }
@@ -94,7 +94,63 @@ std::vector<std::string> ofxIniFile::getStringVector(std::string sSection, std::
 	return result;
 }
 
+// Set int
+void ofxIniFile::setInt(
+				std::string sSection
+				,std::string sKey
+				,int nValue
+)
+{
+	 long lvalue = static_cast<long>(nValue);
+	 setLong(sSection, sKey, lvalue);
+}
 
+void ofxIniFile::setLong(
+				std::string sSection
+				,std::string sKey
+				,long nLongValue)
+{
+	// some params can't be specified yet.. (not sure if necessary)
+	SI_Error err = ini.SetLongValue(
+		sSection.c_str()
+		,sKey.c_str()
+		,nLongValue
+		,NULL
+		,false
+		,true
+	);
+	
+	if(err < 0) {
+		std::cout << "Could not set long value: " <<  err << std::endl;
+	}
+}
+
+void ofxIniFile::setBool(
+					std::string sSection
+					,std::string sKey
+					,bool bBoolValue
+)
+{
+	SI_Error err = ini.SetBoolValue(
+		 sSection.c_str()
+		,sKey.c_str()
+		,bBoolValue
+		,NULL
+		,true
+	);
+	if(err < 0) {
+		std::cout << "Could not set bool value: " <<  err << std::endl;
+	}
+}
+
+
+void ofxIniFile::save() {
+	SI_Error err = ini.SaveFile(ini_file.c_str());
+	if (err < 0) {
+	std::cout << "save err: " << err << std::endl;
+	}
+	
+}
 
 ofxIniFile::~ofxIniFile() {
 }
