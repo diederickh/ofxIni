@@ -1,5 +1,6 @@
 #include "ofxIniFile.h"
 #include "ofMain.h"
+#include <sstream>
 
 ofxIniFile::ofxIniFile(std::string sFile)
 :ini(false, true, false)
@@ -94,6 +95,45 @@ std::vector<std::string> ofxIniFile::getStringVector(std::string sSection, std::
 	return result;
 }
 
+IniVec3f ofxIniFile::getVec3f(
+		std::string sSection
+		,std::string sKey
+		,std::string sDefaultValue
+)
+{
+	// ugly as what.. but it works
+	std::string vec_string = getString(sSection, sKey, sDefaultValue);
+	std::stringstream iss(vec_string);
+	
+	std::string x,y,z;
+	getline(iss, x, ',');
+	getline(iss, y, ',');
+	getline(iss, z, ',');
+	trim(x);
+	trim(y);
+	trim(z);
+	std::string result = x + "\n" + y + "\n" +z;
+	std::istringstream is(result);
+	float xx,yy,zz;
+	IniVec3f v(0,0,0);
+	is >> v.x >> v.y >> v.z;
+	return v;
+}
+
+void ofxIniFile::trim(std::string& sValue) {
+	char str[sValue.size()+1];
+	int len = sValue.size();
+	const char* v = sValue.c_str();
+	int j = 0;
+	for(int i = 0; v[i] != '\0'; ++i) {
+		if(v[i] != ' ' && v[i] != '\t') {
+			str[j++] = v[i];
+		}
+	}
+	str[j] = '\0'; 
+	sValue = str;
+}
+
 // Set int
 void ofxIniFile::setInt(
 				std::string sSection
@@ -142,6 +182,74 @@ void ofxIniFile::setBool(
 		std::cout << "Could not set bool value: " <<  err << std::endl;
 	}
 }
+
+float ofxIniFile::getFloat(
+				std::string sSection
+				,std::string sKey
+				,float fDefaultValue 
+) 
+{
+	// TODO how to make this cleaner?
+	istringstream iss;
+	ostringstream oss;
+	oss << fDefaultValue; 
+	std::string value = getString(sSection, sKey, iss.str());
+	stringstream ss;
+	ss << value;
+	float result;
+	ss >> result;
+	return result;
+}
+	
+void ofxIniFile::setVec3f(
+					std::string sSection
+					,std::string sKey
+					,IniVec3f oVec3f
+)
+{	
+	ostringstream oss;
+	oss << oVec3f.x << ", " << oVec3f.y << ", " << oVec3f.z;
+	SI_Error err = ini.SetValue(
+		sSection.c_str()
+		,sKey.c_str()
+		,oss.str().c_str()
+		,NULL
+		,true
+	);
+	if(err < 0) {
+		std::cout << "Could not set vec3f value" << std::endl;
+	}
+}
+
+void ofxIniFile::setFloat(
+					std::string sSection
+					,std::string sKey
+					,float fValue
+)
+{	
+	stringstream ss;
+	ss << fValue;
+	setString(sSection, sKey, ss.str());
+}
+
+void ofxIniFile::setString(
+		 std::string sSection
+		,std::string sKey
+		,std::string sValue
+)
+{
+	SI_Error err = ini.SetValue(
+		 sSection.c_str()
+		,sKey.c_str()
+		,sValue.c_str()
+		,NULL
+		,true
+	);
+	if(err < 0) {
+		std::cout << "Could not set string value" << std::endl;
+	}
+}
+
 
 
 void ofxIniFile::save() {

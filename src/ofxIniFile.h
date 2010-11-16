@@ -6,6 +6,10 @@
 #include <sstream>
 #include "SimpleIni.h"
 
+struct IniVec3f {
+	IniVec3f(float fX, float fY, float fZ):x(fX),y(fY),z(fZ) {};
+	float x,y,z;
+};
 
 /**
  * Simple wrapper for a c-style minimal ini setting parser.
@@ -45,7 +49,19 @@ public:
 		,std::string sDefaultValue
 		,char sSeparator = ','
 	);
-
+	
+	IniVec3f getVec3f(
+ 		 std::string sSection
+		,std::string sKey
+		,std::string sDefaultValue // comma separated float string
+	);
+	
+	float getFloat(
+		 std::string sSection
+		,std::string sKey
+		,float fDefaultValue = 0.0f
+	);
+	
 	// use this when you have multiple same keys.
 	std::vector<std::string> getAllValues(
 			 std::string sSection
@@ -70,7 +86,29 @@ public:
 		,bool bBoolValue
 	);
 	
+	void setVec3f(
+		std::string sSection
+		,std::string sKey
+		,IniVec3f oVec3f
+	);
+	
+	void setString(
+		std::string sSection
+		,std::string sKey
+		,std::string sValue
+	);
+
+	void setFloat(
+		std::string sSection
+		,std::string sKey
+		,float fValue
+	);
+
+	
+	
 	void save();
+	
+	void trim(std::string& sValue);
 
 /*
     bool GetAllValues(
