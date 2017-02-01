@@ -13,11 +13,11 @@ speed=0.5 # double
 enabled=y # boolean, y-n,0,1, etc..
  */
 
-	std::cout	<<	"server port: "		<< ini.get("game:server_port",-1)		<< std::endl
-				<<	"show_score:"		<< ini.get("game:show_score", false)	<< std::endl
-				<<	"loop_game:"		<< ini.get("game:loop_game", true)		<< std::endl
-				<<	"speed:"			<< ini.get("game:speed", 0.2)			<< std::endl
-				<<	"gui:"				<< ini.get("gui:enabled", false)		<< std::endl;
+	std::cout	<<	"server port: "		<< ini.get("game",  "server_port",-1)		<< std::endl
+				<<	"show_score:"		<< ini.get("game",  "show_score", false)	<< std::endl
+				<<	"loop_game:"		<< ini.get("game",  "loop_game", true)		<< std::endl
+				<<	"speed:"			<< ini.get("game",  "speed", 0.2)			<< std::endl
+				<<	"gui:"				<< ini.get("gui",   "enabled", false)	    << std::endl;
 			
 }
 //--------------------------------------------------------------
