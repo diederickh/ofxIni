@@ -2,16 +2,31 @@
 #include "ofMain.h"
 #include <sstream>
 
+using namespace std;
+
+ofxIniFile::ofxIniFile()
+	:
+	ini(false, true, false),
+	ini_file(""),
+	bOpen(false)
+{
+
+}
+
 ofxIniFile::ofxIniFile(const std::string & sFile)
-:ini(false, true, false)
-,ini_file(sFile)
+	:
+	ini(false, true, false),
+	ini_file(sFile),
+	bOpen (true)
 {
 	// try from data path
 	ini_file = ofToDataPath(sFile,false);
 	SI_Error err = ini.LoadFile(ini_file.c_str());
 	if(err != SI_OK)
+	{
 		ofLogError("ofxIniFile") << "Error loading file: " << ini_file;
-
+		bOpen = false;
+	}
 	// 2010.11.02, make it possible to use multi keys.
 	ini.SetMultiKey(true);
 }

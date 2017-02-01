@@ -1,16 +1,18 @@
 #pragma once
 
 #include "SimpleIni.h"
-#include "ofVec3f.h"
 
 /**
  * Simple wrapper for a c-style minimal ini setting parser.
  */
 class ofxIniFile {
 public:
+	ofxIniFile();
 	ofxIniFile(const std::string & sFile);
 	~ofxIniFile();
 	
+	bool isOpen() { return bOpen; }
+
 	int			get(const string & sSection, const string & sKey, int defaultValue);
 	long		get(const string & sSection, const string & sKey, long defaultValue);
     bool		get(const string & sSection, const string & sKey, bool defaultValue);
@@ -51,6 +53,7 @@ private:
     CSimpleIniA  ini;
 	std::string  ini_file;
 	//dictionary*  ini;
+	bool bOpen;
 
 	void trim(std::string& sValue);
 };
